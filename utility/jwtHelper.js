@@ -5,7 +5,7 @@ import { updateRefreshJWT } from "../model/userModel.js";
 // Function to generate access token
 // secret_key
 // node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-const generateAccessJWT = (email) => {
+export const generateAccessJWT = (email) => {
   try {
     const accessToken = jwt.sign({ email }, process.env.ACCESS_JWT_SECRET_KEY, {
       expiresIn: "15m",
@@ -43,4 +43,15 @@ export const generateJWTs = (email) => {
     accessJWT: generateAccessJWT(email),
     refreshJWT: generateRefreshJWT(email),
   };
+};
+
+// Validate accessJWT
+export const verifyAccessJWT = (accessJWT) => {
+  return jwt.verify(accessJWT, process.env.ACCESS_JWT_SECRET_KEY);
+};
+
+// Validate refreshJWT
+
+export const verifyRefreshJWT = (refreshJWT) => {
+  return jwt.verify(refreshJWT, process.env.REFRESH_JWT_SECRET_KEY);
 };

@@ -6,6 +6,7 @@ import {
   buildSuccessResponse,
 } from "../utility/responseHelper.js";
 import { generateJWTs } from "../utility/jwtHelper.js";
+import { refreshAuth, userAuth } from "../authMiddleware/authMiddleware.js";
 
 const userRouter = express.Router();
 
@@ -59,4 +60,18 @@ userRouter.post("/login", async (req, res) => {
     buildErrorResponse(res, "Invalid Credentials!");
   }
 });
+
+//Private ROutes
+// Get user
+
+userRouter.get("/", userAuth, async (req, res) => {
+  try {
+    buildSuccessResponse(res, req.userInfo, "User Info");
+  } catch (error) {
+    buildErrorResponse(res, "Invalid access token");
+  }
+});
+
+// Get new access token
+userRouter.get("/accessjwt", refreshAuth);
 export default userRouter;

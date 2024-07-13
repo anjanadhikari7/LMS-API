@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { buildErrorResponse } from "../utility/responseHelper";
 
 export const newUserValidation = (req, res, next) => {
   try {
@@ -16,7 +17,7 @@ export const newUserValidation = (req, res, next) => {
 
     if (error) {
       // Bring same respnse helper from last project
-      // buildErrorResponse(res,error.message)
+      buildErrorResponse(res, error.message);
       return;
     }
 
