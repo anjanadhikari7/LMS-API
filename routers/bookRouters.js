@@ -1,5 +1,10 @@
 import express from "express";
-import { createBook, deletebook, getAllBooks } from "../model/bookModel.js";
+import {
+  createBook,
+  deletebook,
+  getAllBooks,
+  updatebook,
+} from "../model/bookModel.js";
 import {
   buildErrorResponse,
   buildSuccessResponse,
@@ -35,6 +40,21 @@ bookRouter.post("/", adminAuth, newBookValidation, async (req, res) => {
     book?._id
       ? buildSuccessResponse(res, book, "Book created Successfully")
       : buildErrorResponse(res, "Unable to create book");
+  } catch (error) {
+    if (error.code === 11000) {
+      error.message =
+        "There is another book that has similar ISBN. Plase change the isbn and try again";
+    }
+    buildErrorResponse(res, error.message);
+  }
+});
+
+//Update book
+bookRouter.patch("/", adminAuth, async (req, res) => {
+  try {
+    const updatedbook = req.body;
+    const book = await updatebook(updatedbook);
+    buildSuccessResponse(res, book, "Book updated successfully!!");
   } catch (error) {
     if (error.code === 11000) {
       error.message =

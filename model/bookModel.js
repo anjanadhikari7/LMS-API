@@ -17,3 +17,10 @@ export const createBook = (bookObj) => {
 export const deletebook = (id) => {
   return bookSchema.findByIdAndDelete(id);
 };
+
+// update bok
+
+export const updatebook = (updatedbook) => {
+  const { id } = updatedbook;
+  return bookSchema.findByIdAndUpdate(id, updatedbook);
+};
