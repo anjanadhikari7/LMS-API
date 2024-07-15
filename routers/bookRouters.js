@@ -9,7 +9,10 @@ import {
   buildErrorResponse,
   buildSuccessResponse,
 } from "../utility/responseHelper.js";
-import { newBookValidation } from "../validationMiddleware/bookValidation.js";
+import {
+  newBookValidation,
+  updateBookValidation,
+} from "../validationMiddleware/bookValidation.js";
 import { adminAuth } from "../authMiddleware/authMiddleware.js";
 
 const bookRouter = express.Router();
@@ -50,7 +53,7 @@ bookRouter.post("/", adminAuth, newBookValidation, async (req, res) => {
 });
 
 //Update book
-bookRouter.patch("/", adminAuth, async (req, res) => {
+bookRouter.patch("/", updateBookValidation, adminAuth, async (req, res) => {
   try {
     const updatedbook = req.body;
     const book = await updatebook(updatedbook);
