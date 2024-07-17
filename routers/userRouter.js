@@ -7,6 +7,7 @@ import {
 } from "../utility/responseHelper.js";
 import { generateJWTs } from "../utility/jwtHelper.js";
 import { refreshAuth, userAuth } from "../authMiddleware/authMiddleware.js";
+import { deleteSession } from "../model/sessionModel.js";
 
 const userRouter = express.Router();
 
@@ -75,3 +76,18 @@ userRouter.get("/", userAuth, async (req, res) => {
 // Get new access token
 userRouter.get("/accessjwt", refreshAuth);
 export default userRouter;
+
+userRouter.post("/logout", userAuth, async (req, res) => {
+  try {
+    const { authorization } = req.headers;
+
+    // remove session from session table
+
+    const deletedSession = await deleteSession(authorization);
+    deletedSession?._id
+      ? buildSuccessResponse(res, {}, "Bye, See you again!!")
+      : buildErrorResponse(res, "Could not logout");
+  } catch (error) {
+    buildErrorResponse(res, "Could not logout");
+  }
+});
